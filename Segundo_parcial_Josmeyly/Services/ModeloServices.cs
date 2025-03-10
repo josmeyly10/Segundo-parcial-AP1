@@ -14,22 +14,22 @@ namespace Segundo_parcial_Josmeyly.Services
             return true;
             }
 
-            private async Task<bool> Insertar(Modelo modelo)
+            private async Task<bool> Insertar(Encuesta modelo)
             {
             return true;
             }
 
-            private async Task<bool> Modificar(Modelo modelo)
+            private async Task<bool> Modificar(Encuesta modelo)
             {
             return true;
             }
 
-            public async Task<bool> Guardar(Modelo modelo)
+            public async Task<bool> Guardar(Encuesta modelo)
             {
             return true;
             }
 
-           public async Task<Modelo> Buscar(int Id)
+           public async Task<Encuesta> Buscar(int Id)
            {
             
            }
@@ -39,15 +39,15 @@ namespace Segundo_parcial_Josmeyly.Services
             return true;
             }
 
-            public async Task<List<Modelo>> GetList(Expression<Func<Modelo, bool>> criterio)
+            public async Task<List<Encuesta>> GetList(Expression<Func<Encuesta, bool>> criterio)
             {
             
             }
-           public async Task<List<Modelo>> GetModelo(int modeloId)
+           public async Task<List<Encuesta>> GetModelo(int modeloId)
            {
             
            }
-            public async Task<Modelo?> BuscarModelo(int modeloid)
+            public async Task<Encuesta?> BuscarModelo(int modeloid)
             {
             
             }
