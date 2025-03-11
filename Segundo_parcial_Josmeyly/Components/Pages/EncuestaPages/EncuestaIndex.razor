@@ -1,0 +1,159 @@
+﻿@page "/Encuesta/Index"
+@inject EncuestaServices encuestaServices
+@inject NavigationManager navigationManager
+
+
+<PageTitle>Index Encuesta</PageTitle>
+<div class="container">
+    <div class="shadow-lg">
+        @*Header*@
+        <div class="card-header">
+            <div class="text-center">
+                <h2><strong>Encuestas</strong></h2>
+            </div>
+        </div>
+        @*Body*@
+        <div class="card-body">
+            <div class="row">
+                @*Filtrar*@
+                <div class="col-3">
+                    <label class="col-form-label"><strong>Filtrar por</strong></label>
+                </div>
+                @*ValorFiltrado*@
+                <div class="col-3">
+                    <label class="form-label"><strong>Buscar</strong></label>
+                </div>
+            </div>
+
+            <div class="row">
+                @*Filtro*@
+                <div class="col-3">
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="">Elija una opción</option>
+                        <option value="ID">ID</option>
+                        <option value="Encuesta">Asignatura</option>
+                        <option value="Fecha">Fecha</option>
+                    </InputSelect>
+                </div>
+                @*Buscar*@
+                <div class="col-3">
+                    <div class="input-group">
+                        <input class="form-control" @bind="ValorFiltrado" placeholder="Buscar" />
+                        <button type="button" class="btn btn-outline-primary bi bi-search" @onclick="Buscar"> Buscar</button>
+                    </div>
+                </div>
+
+                @*Restablecer*@
+                <div class="col-3">
+                    <button type="button" class="btn btn-outline-secondary bi bi-arrow-clockwise" @onclick="Restablecer"></button>
+                </div>
+
+                @*Crear*@
+                <div class="col text-end">
+                    <a href="Encuesta/Create"><button type="button" class="btn btn-success bi bi-person-plus"> Crear</button></a>
+                </div>
+            </div>
+
+            <table class="table table-bordered text-center mt-4">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Fecha</th>
+                        <th>Asignatura</th>
+                        <th>Monto</th>
+                        <th>Detalles</th>
+                        <th>Observar</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var encuesta in ListarEncuesta)
+                    {
+                        <tr>
+                            <td>@encuesta.EncuestaId</td>
+                            <td>@encuesta.Fecha?.ToString("dd/MM/yyyy")</td>
+                            <td>@encuesta.Asignatura</td>
+                            <td>@encuesta.Monto</td>
+                            <td>
+                                <ul>
+                                    @foreach (var detalle in encuesta.DetalleCiudad)
+                                    {
+                                        <li>
+                                            MontoCuenta: @detalle.MontoCuenta - Fecha: @encuesta.Fecha?.ToString("dd/MM/yyyy") - Monto: @encuesta.Monto
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                            @*Boton Observar*@
+                            <td>
+                                <button type="button" class="btn btn-outline-primary bi bi-eye" @onclick="() => PantallaObservar(encuesta.EncuestaId)"></button>
+                            </td>
+                            @*Boton Editar*@
+                            <td>
+                                <button type="button" class="btn btn-outline-warning bi bi-pen" @onclick="() => PantallaEditar(encuesta.EncuestaId)"></button>
+                            </td>
+                            @*Boton Eliminar*@
+                            <td>
+                                <button type="button" class="btn btn-outline-danger bi bi-trash" @onclick="() => PantallaEliminar(encuesta.EncuestaId)"></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @*Footer*@
+        <div class="card-footer">
+            <p><strong>Cantidad de encuestas: </strong>@ListarEncuesta.Count</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<Encuesta> ListarEncuesta { get; set; } = new List<Encuesta>();
+    public string ValorFiltrado = string.Empty;
+    public string Filtro = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListarEncuesta = await encuestaServices.Listar(e => true);
+    }
+
+    public async Task Buscar()
+    {
+        if (!string.IsNullOrWhiteSpace(ValorFiltrado))
+        {
+            if (Filtro == "ID" && int.TryParse(ValorFiltrado, out int encuestaId))
+                ListarEncuesta = await encuestaServices.Listar(e => e.EncuestaId == encuestaId);
+            else if (Filtro == "Asignatura")
+                ListarEncuesta = await encuestaServices.Listar(e => e.Asignatura.ToLower().Contains(ValorFiltrado.ToLower()));
+            
+        }
+        else
+        {
+            ListarEncuesta = await encuestaServices.Listar(e => true);
+        }
+    }
+
+    public async Task Restablecer()
+    {
+        ListarEncuesta = await encuestaServices.Listar(e => true);
+        ValorFiltrado = string.Empty;
+        Filtro = string.Empty;
+    }
+
+    public void PantallaObservar(int id)
+    {
+        navigationManager.NavigateTo($"/Encuesta/Details/{id}");
+    }
+
+    public void PantallaEditar(int id)
+    {
+        navigationManager.NavigateTo($"/Encuesta/Edit/{id}");
+    }
+
+    public void PantallaEliminar(int id)
+    {
+        navigationManager.NavigateTo($"/Encuesta/Delete/{id}");
+    }
+} 

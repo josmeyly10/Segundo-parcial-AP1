@@ -1,0 +1,63 @@
+﻿@page "/Ciudad/Index"
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Listado de Ciudades</PageTitle>
+
+<div class="container">
+    <div class="shadow-lg">
+
+        @*Header*@
+        <div class="card-header text-center">
+            <h3><strong>Listado de Ciudades</strong></h3>
+        </div>
+
+        @*Body*@
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>CiudadId</th>
+                        <th>Nombre</th>
+                        <th>Monto</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ciudad in ListaCiudades)
+                    {
+                        <tr>
+                            <td>@ciudad.CiudadesId</td>
+                            <td>@ciudad.Nombres</td>
+                            <td>@ciudad.Monto</td>
+                            <td>
+                                <button class="btn btn-primary" @onclick="() => VerDetalles(ciudad.CiudadesId)">Detalles</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @*Footer*@
+        <div class="card-footer text-end mt-3">
+            <button class="btn btn-success" @onclick="CrearNuevaCiudad">Crear Nueva Ciudad</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<Ciudades> ListaCiudades { get; set; } = new List<Ciudades>();
+
+   
+
+    private void VerDetalles(int ciudadId)
+    {
+        navigationManager.NavigateTo($"/Ciudad/Details/{ciudadId}");
+    }
+
+    private void CrearNuevaCiudad()
+    {
+        navigationManager.NavigateTo("/Ciudad/Create");
+    }
+}
