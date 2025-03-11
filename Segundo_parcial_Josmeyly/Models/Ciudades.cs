@@ -7,18 +7,24 @@ namespace Segundo_parcial_Josmeyly.Models
     {
 
         [Key]
-        public int CiudadId { get; set; }
+        public int CiudadesId { get; set; }
 
         public string Nombres { get; set; } = null!;
 
         public double Monto { get; set; }
 
-        [InverseProperty("Ciudad")]
+        [InverseProperty("Ciudades")]
         public virtual ICollection<Encuesta> Encuesta { get; set; } = new List<Encuesta>();
 
+        [InverseProperty("Ciudades")]
+
+        public virtual ICollection<DetalleCiudad> DetalleCiudad { get; set; } = new List<DetalleCiudad>();
         
-
-
     }
+
+
+
+
 }
+
 
