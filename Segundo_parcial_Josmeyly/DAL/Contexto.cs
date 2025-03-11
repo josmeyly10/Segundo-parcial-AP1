@@ -8,8 +8,10 @@ namespace Segundo_parcial_Josmeyly.DAL
     {
         public Contexto(DbContextOptions<Contexto> options) : base(options) { }
 
-        public virtual DbSet<Encuesta> Encuesta { get; set; }
+        public  DbSet<Encuesta> Encuesta { get; set; }
 
+        public  DbSet<DetalleCiudad> DetalleCuidad{ get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -18,19 +20,19 @@ namespace Segundo_parcial_Josmeyly.DAL
                 {
                 new()
                 {
-                    CiudadId = 1,
+                    CiudadesId = 1,
                     Nombres = "Villa Arriba",
                     Monto= 0,
                 },
                 new()
                 {
-                    CiudadId = 2,
+                    CiudadesId = 2,
                     Nombres = "San francisco",
                     Monto= 0,
                 },
                 new()
                 {
-                    CiudadId = 3,
+                    CiudadesId = 3,
                     Nombres = "San Pedro de macoris",
                     Monto= 0,
                 }
