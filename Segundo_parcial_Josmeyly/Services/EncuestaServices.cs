@@ -24,7 +24,7 @@ namespace Segundo_parcial_Josmeyly.Services
             contexto.Encuesta.Add(encuesta);
             foreach (var dEncuesta in encuesta.DetalleCiudad)
             {
-                contexto.DetalleCuidad.Add(dEncuesta);
+                contexto.DetalleCiudad.Add(dEncuesta);
             }
             return await contexto.SaveChangesAsync() > 0;
         }
@@ -42,16 +42,24 @@ namespace Segundo_parcial_Josmeyly.Services
         public async Task<bool> Guardar(Encuesta encuesta)
         {
             await using var contexto = await DbFactory.CreateDbContextAsync();
-            contexto.Update(encuesta);
-            return await contexto.SaveChangesAsync() > 0;
+            if (!await Existe(encuesta.EncuestaId))
+            {
+                return await Insertar(encuesta);
+            }
+            else
+            {
+                return await Modificar(encuesta);
+            }
 
         }
 
-        public async Task<Encuesta> Buscar(int encuestaId)
+        public async Task<Encuesta?> Buscar(int encuestaId)
         {
             await using var contexto = await DbFactory.CreateDbContextAsync();
-            return await contexto.Encuesta.Include(c => c.Ciudades)
+            return await contexto.Encuesta
+                //.Include(c => c.Ciudades)
                 .Include(d => d.DetalleCiudad)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.EncuestaId == encuestaId);
         }
 
@@ -60,6 +68,7 @@ namespace Segundo_parcial_Josmeyly.Services
             await using var contexto = await DbFactory.CreateDbContextAsync();
             return await contexto.Encuesta
                 .Where(e => e.EncuestaId == encuestaId)
+                .Include(e => e.DetalleCiudad)
                 .ExecuteDeleteAsync() > 0;
 
         }
@@ -68,7 +77,7 @@ namespace Segundo_parcial_Josmeyly.Services
         {
             await using var contexto = await DbFactory.CreateDbContextAsync();
             return await contexto.Encuesta
-                .Include(c => c.Ciudades)
+                //.Include(c => c.Ciudades)
                 .Include(d => d.DetalleCiudad)
                 .Where(criterio)
                 .AsNoTracking()
@@ -79,7 +88,7 @@ namespace Segundo_parcial_Josmeyly.Services
         {
             await using var contexto = await DbFactory.CreateDbContextAsync();
             return await contexto.Encuesta
-                .Include(c =>c.Ciudades)
+                //.Include(c => c.Ciudades)
                 .Include(d => d.DetalleCiudad)
                 .AsNoTracking()
                 .ToListAsync();
@@ -89,19 +98,14 @@ namespace Segundo_parcial_Josmeyly.Services
         {
             await using var contexto = await DbFactory.CreateDbContextAsync();
             return await contexto.Encuesta
-                .Include (c => c.Ciudades)
+                 .Include(c => c.Ciudades)
+                 .Include(e => e.DetalleCiudad)
                 .Where(criterio)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task<Encuesta?> BuscarEncuesta(int id)
-        {
-            await using var contexto = await DbFactory.CreateDbContextAsync();
-            return await contexto.Encuesta.
-                Include(c => c.Ciudades)
-                .FirstOrDefaultAsync(c => c.CiudadesId == id);
-        }
-
+       
         public async Task<bool> ExisteEncuesta(int EncuestaId, string Asignatura)
         {
             await using var contexto = await DbFactory.CreateDbContextAsync();
@@ -109,9 +113,5 @@ namespace Segundo_parcial_Josmeyly.Services
                 .AnyAsync(e => e.EncuestaId != EncuestaId &&
                 e.Asignatura.ToLower().Equals(Asignatura.ToLower()));
         }
-
     }
-
 }
-    
-
