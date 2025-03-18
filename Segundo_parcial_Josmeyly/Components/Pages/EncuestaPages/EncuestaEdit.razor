@@ -1,5 +1,6 @@
 ﻿@page "/Encuesta/Edit/{EncuestaId:int}"
 @inject EncuestaServices encuestaServices
+@inject CiudadServices ciudadServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
@@ -69,7 +70,7 @@
                         @*Ciudad*@
                         <div class="col-sm-4 p-0 text-center">
                             <InputSelect class="form-select" @bind-Value="Seleccionado">
-                                <option value="0" selected disabled>--Seleccione una ciudad--</option>
+                                <option value="0" selected disabled>-Seleccione una ciudad-</option>
                                 @foreach (var ciudad in ListaCiudades)
                                 {
                                     <option value="@ciudad.CiudadesId">@ciudad.Nombres</option>
@@ -141,6 +142,7 @@
     {
         
         ListarEncuesta = await encuestaServices.Listar(e => true);
+        ListaCiudades = await ciudadServices.Listar(c => true);
 
         if (EncuestaId > 0)
         {

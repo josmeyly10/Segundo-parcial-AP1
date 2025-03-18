@@ -1,5 +1,6 @@
-﻿@page "/Ciudad/Index"
+﻿@page "/Ciudades/Index"
 @inject NavigationManager navigationManager
+@inject CiudadServices ciudadServices
 @rendermode InteractiveServer
 
 <PageTitle>Listado de Ciudades</PageTitle>
@@ -20,7 +21,7 @@
                         <th>CiudadId</th>
                         <th>Nombre</th>
                         <th>Monto</th>
-                        <th>Acciones</th>
+                        @* <th>Acciones</th> *@
                     </tr>
                 </thead>
                 <tbody>
@@ -30,9 +31,9 @@
                             <td>@ciudad.CiudadesId</td>
                             <td>@ciudad.Nombres</td>
                             <td>@ciudad.Monto</td>
-                            <td>
+                            @* <td>
                                 <button class="btn btn-primary" @onclick="() => VerDetalles(ciudad.CiudadesId)">Detalles</button>
-                            </td>
+                            </td> *@
                         </tr>
                     }
                 </tbody>
@@ -40,16 +41,21 @@
         </div>
 
         @*Footer*@
-        <div class="card-footer text-end mt-3">
+        @* <div class="card-footer text-end mt-3">
             <button class="btn btn-success" @onclick="CrearNuevaCiudad">Crear Nueva Ciudad</button>
-        </div>
+        </div> *@
     </div>
 </div>
 
 @code {
     public List<Ciudades> ListaCiudades { get; set; } = new List<Ciudades>();
 
-   
+    protected override async Task OnInitializedAsync()
+    {
+        ListaCiudades = await ciudadServices.Listar(c => true);
+    }
+
+
 
     private void VerDetalles(int ciudadId)
     {

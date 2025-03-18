@@ -9,15 +9,14 @@ namespace Segundo_parcial_Josmeyly.Models
         public int DetalleCiudadId { get; set; }
 
         [Required(ErrorMessage = "Campo Obligatorio")]
-     
+
         public double MontoCuenta { get; set; }
 
 
         [ForeignKey("EncuestaId")]
 
-        [InverseProperty("CuidadDetalle")]
+        
         public virtual Encuesta Encuesta { get; set; } = null!;
-
 
 
 

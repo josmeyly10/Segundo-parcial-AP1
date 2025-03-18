@@ -10,8 +10,10 @@ namespace Segundo_parcial_Josmeyly.DAL
 
         public  DbSet<Encuesta> Encuesta { get; set; }
 
-        public  DbSet<DetalleCiudad> DetalleCuidad{ get; set; }
-        
+        public  DbSet<DetalleCiudad> DetalleCiudad{ get; set; }
+
+        public DbSet<Ciudades> Ciudades { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,6 +42,5 @@ namespace Segundo_parcial_Josmeyly.DAL
             );
             base.OnModelCreating(modelBuilder);
         }
-
     }
 }
