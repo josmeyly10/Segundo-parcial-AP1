@@ -1,0 +1,53 @@
+﻿@page "/Encuesta/Delete/{EncuestaId:int}"
+@inject EncuestaServices encuestaService
+@inject NavigationManager navigationManager
+
+<PageTitle>Eliminar Encuesta</PageTitle>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-center">
+            <h5 class="card-title">Eliminar Encuesta</h5>
+        </div>
+
+        <div class="card-body text-center">
+            <p>¿Está seguro de que desea eliminar la encuesta <strong>@Encuesta?.Asignatura</strong>?</p>
+            <p>Esta acción no se puede deshacer.</p>
+            <ValidationMessage For="(() => Message)" />
+        </div>
+
+        <div class="card-footer text-center mt-2">
+            <a href="/Encuesta/Index" class="btn btn-secondary"> <span class="bi bi-arrow-left"></span> Volver</a>
+            <button type="button" class="btn btn-danger bi bi-trash" @onclick="Eliminar"> Eliminar</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int EncuestaId { get; set; }
+
+    public Encuesta Encuesta { get; set; } = new Encuesta();
+    public string? Message { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Encuesta = await encuestaService.Buscar(EncuestaId);
+    }
+
+    private async Task Eliminar()
+    {
+        var eliminado = await encuestaService.Eliminar(Encuesta.EncuestaId);
+
+        if (eliminado)
+        {
+            Message = "Se ha eliminado correctamente";
+            
+            navigationManager.NavigateTo("/Encuesta/Index");
+        }
+        else
+        {
+            Message = "No se ha podido eliminar correctamente";
+        }
+    }
+}

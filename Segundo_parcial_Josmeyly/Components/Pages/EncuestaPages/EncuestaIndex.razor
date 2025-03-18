@@ -87,16 +87,21 @@
                             </td>
                             @*Boton Observar*@
                             <td>
-                                <button type="button" class="btn btn-outline-primary bi bi-eye" @onclick="() => PantallaObservar(encuesta.EncuestaId)"></button>
+                                <a href="/Encuesta/Ver/@encuesta.EncuestaId" class="btn btn-outline-primary bi bi-eye"></a>
                             </td>
                             @*Boton Editar*@
+
                             <td>
-                                <button type="button" class="btn btn-outline-warning bi bi-pen" @onclick="() => PantallaEditar(encuesta.EncuestaId)"></button>
+                                <a href="/Encuesta/Edit/@encuesta.EncuestaId" class="btn btn-outline-primary bi bi-pencil-square"></a>
                             </td>
+                           @*  <td>
+                                <button type="button" class="btn btn-outline-warning bi bi-pen" @onclick="() => PantallaEditar(encuesta.EncuestaId)"></button>
+                            </td> *@
                             @*Boton Eliminar*@
                             <td>
-                                <button type="button" class="btn btn-outline-danger bi bi-trash" @onclick="() => PantallaEliminar(encuesta.EncuestaId)"></button>
+                                <a href="/Encuesta/Delete/@encuesta.EncuestaId" class="btn btn-outline-primary bi bi-trash3"></a>
                             </td>
+
                         </tr>
                     }
                 </tbody>
@@ -142,18 +147,4 @@
         Filtro = string.Empty;
     }
 
-    public void PantallaObservar(int id)
-    {
-        navigationManager.NavigateTo($"/Encuesta/Details/{id}");
-    }
-
-    public void PantallaEditar(int id)
-    {
-        navigationManager.NavigateTo($"/Encuesta/Edit/{id}");
-    }
-
-    public void PantallaEliminar(int id)
-    {
-        navigationManager.NavigateTo($"/Encuesta/Delete/{id}");
-    }
 } 
